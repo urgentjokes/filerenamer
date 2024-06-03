@@ -4,9 +4,7 @@ fun main(args: Array<String>) {
     val extensionToChange=args[0]
     val newExtension=args[1]
     val changedFiles= mutableListOf<File>()
-
-    println(extensionToChange)
-    println(newExtension)
+    var conflictAvoider=0
 
     val workingDirectory=System.getProperty("user.dir")
     val directoryTree=(File(workingDirectory).walkTopDown())
@@ -17,16 +15,13 @@ fun main(args: Array<String>) {
     {
        val currentExtension=(file.name.substringAfterLast("."))
         if (currentExtension==extensionToChange) {
-            file.renameTo((File(file.canonicalPath.substringBeforeLast(".") + "." + newExtension)))
-            changedFiles.add((File(file.canonicalPath.substringBeforeLast(".") + "." + newExtension)))
+            try {
+                file.copyTo(File(workingDirectory + "/Storage/" + file.name.substringBeforeLast(".") + "." + newExtension))
+            } catch (e:FileAlreadyExistsException) {
+                conflictAvoider++
+                file.copyTo(File(workingDirectory + "/Storage/" + file.name.substringBeforeLast(".") + conflictAvoider+"." + newExtension))
+            }
         }
     }
-
-    for (file in changedFiles) {
-        file.copyTo(File(workingDirectory+"/Storage/"+file.name))
-    }
-
-
-
 
 }
