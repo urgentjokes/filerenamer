@@ -7,7 +7,7 @@ fun main(args: Array<String>) {
 
     val workingDirectory=System.getProperty("user.dir")
     val directoryTree=(File(workingDirectory).walkTopDown())
-//   val targetFile= File("${ workingDirectory }/dummy.txt")
+//  val targetFile= File("${ workingDirectory }/dummy.txt")
 
 
     for (file in directoryTree)
